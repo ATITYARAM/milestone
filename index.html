@@ -66,6 +66,12 @@
     </div>
 
     <script>
+        // --- CONFIGURATION FOR DIRECT GIT SYNC ---
+        const GITHUB_USERNAME = "ATITYARAM";
+        const GITHUB_REPO = "milestone";
+        const GITHUB_BRANCH = "main";
+        const GITHUB_TOKEN = "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"; // Put your token inside quotes
+
         let milestones = [];
         let currentIndex = 0;
 
@@ -133,6 +139,51 @@
             `;
         }
 
+        // --- GitHub API Sync Function ---
+        async function updateRemoteDataFile(commitMessage) {
+            if (GITHUB_TOKEN === "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" || !GITHUB_TOKEN) {
+                alert("Please add your GitHub token inside index.html to enable auto-syncing to your repository.");
+                return;
+            }
+
+            const apiPath = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/data.json`;
+            const headers = {
+                "Authorization": `Bearer ${GITHUB_TOKEN}`,
+                "Accept": "application/vnd.github+json",
+                "Content-Type": "application/json"
+            };
+
+            try {
+                // 1. Get current file SHA (required by GitHub API to update files)
+                const getRes = await fetch(apiPath, { headers });
+                if (!getRes.ok) throw new Error("Failed to fetch file SHA from GitHub.");
+                const fileData = await getRes.json();
+                const fileSha = fileData.sha;
+
+                // 2. Encode updated JSON array to Base64
+                const updatedJsonString = JSON.stringify(milestones, null, 2);
+                const encodedContent = btoa(unescape(encodeURIComponent(updatedJsonString)));
+
+                // 3. Send PUT request to update data.json on GitHub
+                const putRes = await fetch(apiPath, {
+                    method: "PUT",
+                    headers: headers,
+                    body: JSON.stringify({
+                        message: commitMessage,
+                        content: encodedContent,
+                        sha: fileSha,
+                        branch: GITHUB_BRANCH
+                    })
+                });
+
+                if (!putRes.ok) throw new Error("Failed to commit changes to GitHub.");
+                console.log("Successfully updated data.json on GitHub!");
+            } catch (err) {
+                console.error(err);
+                alert("Error syncing with GitHub: " + err.message);
+            }
+        }
+
         function nextSlide() {
             if (milestones.length === 0) return;
             currentIndex = (currentIndex + 1) % milestones.length;
@@ -145,14 +196,12 @@
             renderPost();
         }
 
-        // Keyboard navigation
         window.addEventListener('keydown', (e) => {
-            if (document.getElementById('addModal').style.display === 'flex') return; // Don't slide while typing
+            if (document.getElementById('addModal').style.display === 'flex') return;
             if (e.key === 'ArrowRight') nextSlide();
             if (e.key === 'ArrowLeft') prevSlide();
         });
 
-        // Touch Swipe Logic
         let touchStartX = 0;
         let touchEndX = 0;
         const viewport = document.getElementById('viewport');
@@ -172,7 +221,6 @@
             if (touchEndX > touchStartX + threshold) prevSlide();
         }
 
-        // Modal Controls
         function openModal() {
             document.getElementById('addModal').style.display = 'flex';
             document.getElementById('inputTitle').focus();
@@ -186,7 +234,7 @@
             document.getElementById('inputImage').value = '';
         }
 
-        function saveMilestone() {
+        async function saveMilestone() {
             const title = document.getElementById('inputTitle').value.trim();
             const content = document.getElementById('inputContent').value.trim();
             const date = document.getElementById('inputDate').value.trim();
@@ -199,7 +247,7 @@
 
             const newPost = {
                 id: Date.now(),
-                date: date || 'Just now',
+                date: date || 'Recent',
                 title: title,
                 content: content,
                 image: image
@@ -209,17 +257,21 @@
             currentIndex = milestones.length - 1;
             closeModal();
             renderPost();
-            
-            console.log("New data array to copy to data.json:", JSON.stringify(milestones, null, 2));
+
+            // Push changes directly to GitHub repo
+            await updateRemoteDataFile(`Add milestone: ${title || 'New Post'}`);
         }
 
-        function deleteCurrentMilestone(index) {
+        async function deleteCurrentMilestone(index) {
             if (confirm('Delete this post?')) {
                 milestones.splice(index, 1);
                 if (currentIndex >= milestones.length) {
                     currentIndex = Math.max(0, milestones.length - 1);
                 }
                 renderPost();
+
+                // Push deletion directly to GitHub repo
+                await updateRemoteDataFile(`Delete milestone at index ${index}`);
             }
         }
 
