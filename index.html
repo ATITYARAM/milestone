@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milestone Timeline</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="top-bar">
+        <h1>Milestone Tracker</h1>
+        <div id="counter" class="counter">Loading...</div>
+    </div>
+
+    <div class="viewport-container">
+        <div class="linkedin-post-card" id="post-card">
+            <!-- Dynamic Content Injected Here via JavaScript -->
+        </div>
+    </div>
+
+    <div class="nav-instructions">
+        Use <kbd>←</kbd> Left and <kbd>→</kbd> Right arrow keys to switch milestones
+    </div>
+
+    <script>
+        let milestones = [];
+        let currentIndex = 0;
+
+        async function loadMilestones() {
+            try {
+                const response = await fetch('data.json');
+                milestones = await response.json();
+                renderPost();
+            } catch (error) {
+                document.getElementById('post-card').innerHTML = `<p style="padding:20px; color:red;">Error loading data.json</p>`;
+            }
+        }
+
+        function renderPost() {
+            if (milestones.length === 0) return;
+            
+            const item = milestones[currentIndex];
+            const card = document.getElementById('post-card');
+            
+            document.getElementById('counter').innerText = `Milestone ${currentIndex + 1} of ${milestones.length}`;
+
+            let imageHTML = '';
+            if (item.image && item.image.trim() !== '') {
+                imageHTML = `
+                    <div class="post-media">
+                        <img src="${item.image}" alt="Milestone Image" onerror="this.style.display='none'">
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
+                <div class="post-header">
+                    <div class="profile-pic">AM</div>
+                    <div class="profile-info">
+                        <h3>Atitya Ram Suresh Manickam</h3>
+                        <p>CSE Student & Developer</p>
+                    </div>
+                    <span class="post-date-tag">${item.date}</span>
+                </div>
+                <div class="post-body">
+                    <div class="post-title">${item.title}</div>
+                    <div class="post-text">${item.content}</div>
+                </div>
+                ${imageHTML}
+                <div class="post-footer-actions">
+                    <span>👍 Like</span>
+                    <span>💬 Comment</span>
+                    <span>🔄 Repost</span>
+                    <span>↗ Share</span>
+                </div>
+            `;
+        }
+
+        // Arrow Key Event Listeners
+        window.addEventListener('keydown', (e) => {
+            if (milestones.length === 0) return;
+
+            if (e.key === 'ArrowRight') {
+                currentIndex = (currentIndex + 1) % milestones.length;
+                renderPost();
+            } else if (e.key === 'ArrowLeft') {
+                currentIndex = (currentIndex - 1 + milestones.length) % milestones.length;
+                renderPost();
+            }
+        });
+
+        loadMilestones();
+    </script>
+</body>
+</html>
