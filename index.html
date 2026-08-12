@@ -66,12 +66,6 @@
     </div>
 
     <script>
-        // --- CONFIGURATION FOR DIRECT GIT SYNC ---
-        const GITHUB_USERNAME = "ATITYARAM";
-        const GITHUB_REPO = "milestone";
-        const GITHUB_BRANCH = "main";
-        const GITHUB_TOKEN = "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";
-
         let milestones = [];
         let currentIndex = 0;
 
@@ -139,41 +133,15 @@
             `;
         }
 
-        // --- GitHub API Sync Function (Updated for Classic Token Type) ---
-        async function updateRemoteDataFile(commitMessage) {
-            const apiPath = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/data.json`;
-            const headers = {
-                "Authorization": `token ${GITHUB_TOKEN}`,
-                "Accept": "application/vnd.github+json",
-                "Content-Type": "application/json"
-            };
-
-            try {
-                const getRes = await fetch(apiPath, { headers });
-                if (!getRes.ok) throw new Error("Failed to fetch file SHA from GitHub.");
-                const fileData = await getRes.json();
-                const fileSha = fileData.sha;
-
-                const updatedJsonString = JSON.stringify(milestones, null, 2);
-                const encodedContent = btoa(unescape(encodeURIComponent(updatedJsonString)));
-
-                const putRes = await fetch(apiPath, {
-                    method: "PUT",
-                    headers: headers,
-                    body: JSON.stringify({
-                        message: commitMessage,
-                        content: encodedContent,
-                        sha: fileSha,
-                        branch: GITHUB_BRANCH
-                    })
-                });
-
-                if (!putRes.ok) throw new Error("Failed to commit changes to GitHub.");
-                alert("Successfully pushed and committed changes to GitHub!");
-            } catch (err) {
-                console.error(err);
-                alert("Error syncing with GitHub: " + err.message);
-            }
+        // Instant local JSON file generator to bypass browser API restrictions cleanly
+        function exportUpdatedJson() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(milestones, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "data.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
         }
 
         function nextSlide() {
@@ -226,7 +194,7 @@
             document.getElementById('inputImage').value = '';
         }
 
-        async function saveMilestone() {
+        function saveMilestone() {
             const title = document.getElementById('inputTitle').value.trim();
             const content = document.getElementById('inputContent').value.trim();
             const date = document.getElementById('inputDate').value.trim();
@@ -250,10 +218,11 @@
             closeModal();
             renderPost();
 
-            await updateRemoteDataFile(`Add milestone: ${title || 'New Post'}`);
+            exportUpdatedJson();
+            alert('Post created! An updated "data.json" file has been downloaded. Replace it in your repository folder and commit/push.');
         }
 
-        async function deleteCurrentMilestone(index) {
+        function deleteCurrentMilestone(index) {
             if (confirm('Delete this post?')) {
                 milestones.splice(index, 1);
                 if (currentIndex >= milestones.length) {
@@ -261,7 +230,8 @@
                 }
                 renderPost();
 
-                await updateRemoteDataFile(`Delete milestone at index ${index}`);
+                exportUpdatedJson();
+                alert('Post deleted! An updated "data.json" file has been downloaded. Replace it in your repository folder and commit/push.');
             }
         }
 
