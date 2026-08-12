@@ -373,9 +373,31 @@ kbd {
 }
 
 .fab-add {
+    position: fixed;
+    bottom: 80px;
+    right: 25px;
+    width: 56px;
+    height: 56px;
+
+    background-color: #0a66c2;
+    color: white;
+
+    border-radius: 50%;
+    border: none;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    cursor: pointer;
+
+    z-index: 9999;
+}
+
+.fab-add:hover {
+    background-color: #004182;
+    transform: scale(1.05);
 }
 
 .add-icon {
