@@ -77,7 +77,7 @@
 
         async function loadMilestones() {
             try {
-                const response = await fetch('data.json');
+                const response = await fetch('data.json?t=' + Date.now());
                 milestones = await response.json();
                 renderPost();
             } catch (error) {
@@ -139,11 +139,11 @@
             `;
         }
 
-        // --- GitHub API Sync Function ---
+        // --- GitHub API Sync Function (Updated for Classic Token Type) ---
         async function updateRemoteDataFile(commitMessage) {
             const apiPath = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/data.json`;
             const headers = {
-                "Authorization": `Bearer ${GITHUB_TOKEN}`,
+                "Authorization": `token ${GITHUB_TOKEN}`,
                 "Accept": "application/vnd.github+json",
                 "Content-Type": "application/json"
             };
@@ -169,7 +169,7 @@
                 });
 
                 if (!putRes.ok) throw new Error("Failed to commit changes to GitHub.");
-                console.log("Successfully updated data.json on GitHub!");
+                alert("Successfully pushed and committed changes to GitHub!");
             } catch (err) {
                 console.error(err);
                 alert("Error syncing with GitHub: " + err.message);
