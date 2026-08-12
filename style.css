@@ -12,10 +12,10 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     position: relative;
-    padding: 60px 16px;
+    padding: 60px 16px 80px 16px;
     overflow-x: hidden;
 }
 
@@ -41,11 +41,12 @@ body {
 
 .viewport-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
     max-width: 600px;
-    margin: auto;
+    margin-top: 80px;
 }
 
 .linkedin-post-card {
@@ -169,24 +170,21 @@ body {
     background: #fafafa;
 }
 
-/* Guaranteed Visible Floating Action Button */
+/* Inline "+" button placed below the viewing post card */
 .fab-add {
-    position: fixed;
-    bottom: 40px;
-    right: 30px;
-    width: 60px;
-    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
     background-color: #0a66c2;
     color: #ffffff;
     border-radius: 50%;
     border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+    margin: 20px auto 0 auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     cursor: pointer;
     transition: background 0.2s, transform 0.2s;
-    z-index: 9999;
 }
 
 .fab-add svg {
@@ -195,7 +193,7 @@ body {
 
 .fab-add:hover {
     background-color: #004182;
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 /* Modal Styling */
@@ -342,13 +340,14 @@ body {
 }
 
 .nav-instructions {
-    margin-top: 30px;
+    margin-top: 20px;
     font-size: 0.75rem;
     color: #64748b;
     background: #1e293b;
     padding: 6px 14px;
     border-radius: 20px;
     border: 1px solid #334155;
+    text-align: center;
 }
 
 @media (max-width: 768px) {
