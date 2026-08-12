@@ -194,7 +194,7 @@ body {
 }
 
 .fab-add:hover {
-    background-color: #004182;
+    background-color: #004182;\
     transform: scale(1.05);
 }
 
@@ -370,4 +370,17 @@ kbd {
     padding: 2px 6px;
     border-radius: 4px;
     font-family: monospace;
+}
+
+.fab-add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-icon {
+    width: 28px;
+    height: 28px;
+    fill: white;
+    display: block;
 }
