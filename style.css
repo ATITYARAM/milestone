@@ -1,0 +1,169 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+    background-color: #0f172a; /* Dark theme wrapper */
+    color: #f8fafc;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.top-bar {
+    position: absolute;
+    top: 20px;
+    text-align: center;
+}
+
+.top-bar h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #cbd5e1;
+}
+
+.counter {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
+/* Main Viewport Container */
+.viewport-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 700px;
+    padding: 0 20px;
+}
+
+/* LinkedIn Style Post Box (Light Theme matching LinkedIn) */
+.linkedin-post-card {
+    background: #ffffff;
+    color: #000000;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #dcdcdc;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+/* Post Header */
+.post-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+}
+
+.profile-pic {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #0a66c2;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-right: 12px;
+}
+
+.profile-info h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: rgba(0,0,0,0.9);
+}
+
+.profile-info p {
+    font-size: 0.75rem;
+    color: rgba(0,0,0,0.6);
+}
+
+.post-date-tag {
+    font-size: 0.75rem;
+    background: #e2e8f0;
+    color: #334155;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: auto;
+    font-weight: 500;
+}
+
+/* Post Content Body */
+.post-body {
+    padding: 0 16px 12px 16px;
+}
+
+.post-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1d2226;
+}
+
+.post-text {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: rgba(0,0,0,0.9);
+    white-space: pre-line;
+}
+
+/* Post Media / Image Section */
+.post-media {
+    width: 100%;
+    max-height: 350px;
+    background-color: #f3f2ef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.post-media img {
+    width: 100%;
+    height: auto;
+    max-height: 350px;
+    object-fit: cover;
+}
+
+/* Post Footer / Actions Bar */
+.post-footer-actions {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 16px;
+    border-top: 1px solid #ebebeb;
+    color: rgba(0,0,0,0.6);
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: #fafafa;
+}
+
+/* Navigation Hint at Bottom */
+.nav-instructions {
+    position: absolute;
+    bottom: 25px;
+    font-size: 0.8rem;
+    color: #64748b;
+    background: #1e293b;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid #334155;
+}
+
+kbd {
+    background: #334155;
+    color: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+}
