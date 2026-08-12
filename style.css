@@ -169,13 +169,13 @@ body {
     background: #fafafa;
 }
 
-/* Fixed Floating Action Button - Guaranteed to be visible */
+/* Guaranteed Visible Floating Action Button */
 .fab-add {
     position: fixed;
-    bottom: 30px;
+    bottom: 40px;
     right: 30px;
-    width: 56px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     background-color: #0a66c2;
     color: #ffffff;
     border-radius: 50%;
@@ -183,10 +183,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
     cursor: pointer;
     transition: background 0.2s, transform 0.2s;
-    z-index: 1000;
+    z-index: 9999;
 }
 
 .fab-add svg {
@@ -195,7 +195,7 @@ body {
 
 .fab-add:hover {
     background-color: #004182;
-    transform: scale(1.08);
+    transform: scale(1.1);
 }
 
 /* Modal Styling */
@@ -205,11 +205,11 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.75);
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 2000;
+    z-index: 10000;
     padding: 16px;
 }
 
@@ -219,7 +219,7 @@ body {
     width: 100%;
     max-width: 520px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     display: flex;
     flex-direction: column;
 }
