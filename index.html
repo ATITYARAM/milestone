@@ -21,10 +21,10 @@
 
     <!-- Floating Action Button with SVG Icon -->
     <button class="fab-add" onclick="openModal()" title="Create a post">
-        <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-            <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6v-2z"></path>
-        </svg>
-    </button>
+    <svg class="add-icon" viewBox="0 0 24 24">
+        <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6v-2z"></path>
+    </svg>
+</button>
 
     <!-- LinkedIn Style "Create a post" Modal -->
     <div class="modal-overlay" id="addModal">
@@ -141,7 +141,7 @@
 
         // --- GitHub API Sync Function ---
         async function updateRemoteDataFile(commitMessage) {
-            if (GITHUB_TOKEN === "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" || !GITHUB_TOKEN) {
+            if (!GITHUB_TOKEN) {
                 alert("Please add your GitHub token inside index.html to enable auto-syncing to your repository.");
                 return;
             }
@@ -162,7 +162,11 @@
 
                 // 2. Encode updated JSON array to Base64
                 const updatedJsonString = JSON.stringify(milestones, null, 2);
-                const encodedContent = btoa(unescape(encodeURIComponent(updatedJsonString)));
+                const encodedContent = btoa(
+    	new TextEncoder()
+        .encode(updatedJsonString)
+        .reduce((data, byte) => data + String.fromCharCode(byte), '')
+);
 
                 // 3. Send PUT request to update data.json on GitHub
                 const putRes = await fetch(apiPath, {
@@ -178,6 +182,10 @@
 
                 if (!putRes.ok) throw new Error("Failed to commit changes to GitHub.");
                 console.log("Successfully updated data.json on GitHub!");
+
+setTimeout(() => {
+    loadMilestones();
+}, 3000);
             } catch (err) {
                 console.error(err);
                 alert("Error syncing with GitHub: " + err.message);
